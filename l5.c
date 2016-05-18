@@ -121,7 +121,7 @@ int l5_sid_add_ipport(uint16_t sid, uint32_t ip, uint16_t port, uint16_t weight)
 }
 
 void l5_sid_del_ipport(uint16_t sid, uint32_t ip, uint16_t port) {
-    uint32_t block_offset, last_offset=0, next_offset=0;
+    uint32_t block_offset, last_offset=0;
     struct l5_block_s* tmpblock, *found=NULL;
 
     const char* addr = get_shm_addr();
@@ -132,11 +132,10 @@ void l5_sid_del_ipport(uint16_t sid, uint32_t ip, uint16_t port) {
     struct wx_spinlock_s* lock = (struct wx_spinlock_s*)sid_lock_addr;
     wx_spinlock_wlock(lock);
 
-    block_offset = *(uint32_t*)sid_addr;
+    last_offset = block_offset = *(uint32_t*)sid_addr;
     for (;BLOCK_OFFSET_OK(block_offset);) {
         tmpblock = (struct l5_block_s*)(addr + block_offset);
         if (tmpblock->ip == ip && tmpblock->port == port) {
-            next_offset = tmpblock->next;
             found = tmpblock;
             break;
         }
@@ -145,9 +144,9 @@ void l5_sid_del_ipport(uint16_t sid, uint32_t ip, uint16_t port) {
     }
     if (found) {
         if (last_offset == *(uint32_t*)sid_addr) {
-            *(uint32_t*)sid_addr = (uint32_t)((char*)found - addr);
+            *(uint32_t*)sid_addr = found->next;
         } else {
-            ((struct l5_block_s*)(addr+last_offset))->next = next_offset;
+            ((struct l5_block_s*)(addr+last_offset))->next = found->next;
         }
         free_block_unshift(found);
     }

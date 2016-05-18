@@ -10,7 +10,7 @@
 void print_item(uint32_t ip, uint16_t port, uint16_t weight, void* arg) {
     char sip[16]={0};
     int2ip(ip, sip);
-    printf("%s, %d, %d\n", sip, port, weight);;
+    printf("%s %d %d\n", sip, port, weight);;
 }
 
 void showusage() {
@@ -45,7 +45,7 @@ int run_tool(int argc, char** argv) {
     } else if(3 == sscanf(args, "-d %hu %s %hu", &sid, sip, &port)) {
         ip2int(sip, &ip);
         l5_sid_del_ipport(sid, ip, port);
-        l5_sid_each_block(sid, print_item, NULL);
+//        l5_sid_each_block(sid, print_item, NULL);
     } else if(1 == sscanf(args, "-g %hu", &sid)) {
         l5_sid_each_block(sid, print_item, NULL);
     } else {
