@@ -45,7 +45,7 @@ int run_tool(int argc, char** argv) {
     } else if(3 == sscanf(args, "-d %hu %s %hu", &sid, sip, &port)) {
         ip2int(sip, &ip);
         l5_sid_del_ipport(sid, ip, port);
-//        l5_sid_each_block(sid, print_item, NULL);
+        l5_sid_each_block(sid, print_item, NULL);
     } else if(1 == sscanf(args, "-g %hu", &sid)) {
         l5_sid_each_block(sid, print_item, NULL);
     } else {
