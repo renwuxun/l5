@@ -7,11 +7,8 @@
 
 static char* l5_shm_addr = NULL;
 
-static inline char* get_shm_addr() {
+static inline static inline char* get_shm_addr() {
     if (NULL == l5_shm_addr) {
-//        char f[512]={0};
-//        readlink("/proc/self/exe",f, sizeof(f));
-//        key_t k = ftok(f, 0);
         int shmid = wx_shm_alloc(0x00002537, BLOCK_START_OFFSET + BLOCK_CNT*sizeof(struct l5_block_s));
         l5_shm_addr = (char*)wx_shm_attach(shmid);
     }
@@ -44,7 +41,7 @@ int l5_shm_detach() {
     return wx_shm_detach(l5_shm_addr);
 }
 
-struct l5_block_s* free_block_shift() {
+static inline struct l5_block_s* free_block_shift() {
     const char* addr = get_shm_addr();
     const char* addr_keep_free_block_offset = addr+OFFSET_KEEP_FREE_BLOCK_OFFSET;
     uint32_t next_block_offset,free_block_offset;
@@ -64,7 +61,7 @@ struct l5_block_s* free_block_shift() {
     return r;
 }
 
-void free_block_unshift(struct l5_block_s* block) {
+static inline void free_block_unshift(struct l5_block_s* block) {
     const char* addr = get_shm_addr();
     const char* addr_keep_free_block_offset = addr+OFFSET_KEEP_FREE_BLOCK_OFFSET;
     uint32_t free_block_offset,new_block_offset = (uint32_t)((char*)block - addr);;
