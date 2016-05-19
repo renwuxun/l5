@@ -7,7 +7,7 @@
 
 static char* l5_shm_addr = NULL;
 
-static inline static inline char* get_shm_addr() {
+static inline char* get_shm_addr() {
     if (NULL == l5_shm_addr) {
         int shmid = wx_shm_alloc(0x00002537, BLOCK_START_OFFSET + BLOCK_CNT*sizeof(struct l5_block_s));
         l5_shm_addr = (char*)wx_shm_attach(shmid);
