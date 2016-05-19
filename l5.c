@@ -112,6 +112,7 @@ int l5_sid_add_ipport(uint16_t sid, uint32_t ip, uint16_t port, uint16_t weight)
         newblock->port = port;
         newblock->weight = weight;
     }
+
     wx_spinlock_wunlock(lock);
 
     return 0;
