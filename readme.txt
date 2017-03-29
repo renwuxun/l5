@@ -12,6 +12,12 @@
         curl -H"User-Agent:curl" 127.0.0.1:9527/get/{sid}
         系统自带的curl通常默认会携带一串很长的User-Agent过多的浪费接收缓冲区，所以这里需要覆盖默认值
 
+    清除共享内存：
+        ipcrm -M 0x00002537
+
+    批量添加：
+        cat sid-ip-port-weight.conf|xargs -n4 ./l5worker -a
+
 类型：
     sid    uint16_t    [0,65535]
     port   uint16_t    [0,65535]
